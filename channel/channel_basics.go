@@ -2,15 +2,24 @@ package main
 
 import(
 	"fmt"
+	"sync"
 )
 
-func main()  {
-	var ms *myStruct
-	ms = new(myStruct)
-	ms.foo = 42
-	fmt.Println(ms.foo)
-}
+var wg = sync.WaitGroup{}
 
-type myStruct struct {
-	foo int
+func main()  {
+	ch := make(chan int)
+	for j := 0; j < 5; j++ {
+		wg.Add(2)
+		go func(ch <-chan int) {
+			i := <- ch
+			fmt.Println(i)
+			wg.Done()
+		}(ch)
+		go func(ch chan<- int) {
+			ch <- 42
+			wg.Done()
+		}(ch)
+	}
+	wg.Wait()
 }
