@@ -1,10 +1,10 @@
 package main
 
-import(
+import (
 	"fmt"
 )
 
-func main()  {
+func main() {
 	var ms *myStruct
 	ms = new(myStruct)
 	ms.foo = 42
