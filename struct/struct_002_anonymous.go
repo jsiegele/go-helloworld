@@ -6,6 +6,8 @@ import (
 
 func main() {
 	aDoctor := struct{name string}{name: "john doe"}
+	anotherDoctor := aDoctor
+	anotherDoctor.name = "jane doe"
 	fmt.Println(aDoctor)
-	fmt.Println(aDoctor.name)
+	fmt.Println(anotherDoctor)
 }
