@@ -15,5 +15,6 @@ func main() {
 	graph.addEdge("b", "d", 2)
 	graph.addEdge("b", "e", 6)
 	graph.addEdge("d", "e", 4)
+	// graph.PrintGraph()
 	fmt.Println(graph.getPath("a", "d"))
 }
