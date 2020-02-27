@@ -13,16 +13,6 @@ type graph struct {
 	nodes map[string][]edge
 }
 
-func (g *graph) PrintGraph() {
-	fmt.Println(g)
-	for k := range g.nodes {
-		fmt.Printf("parent[%s]\n", k)
-		for _, u := range g.nodes[k] {
-			fmt.Printf("---child[%s]\n", u.node)
-		}
-	}
-}
-
 func newGraph() *graph {
 	return &graph{nodes: make(map[string][]edge)}
 }
