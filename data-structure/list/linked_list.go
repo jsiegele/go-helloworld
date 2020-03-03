@@ -86,11 +86,27 @@ func (f *Feed) Inspect() {
 	currentPost := f.start
 
 	for currentIndex < f.length {
-		fmt.Printf("Item: %v - %v\n", currentIndex, currentPost)
+		fmt.Printf("Item: %v - %v - %v\n", currentIndex, currentPost.body, currentPost.publishDate)
 		currentPost = currentPost.next
 		currentIndex++
 	}
 	fmt.Println("========================")
+}
+
+// Inspect Feed
+func (f *Feed) Merge(u *Feed) {
+	if f.length == 0 {
+		f.start = u.start
+	}
+
+	currentIndex := 0
+	currentPost := u.start
+
+	for currentIndex < u.length {
+		f.Insert(currentPost)
+		currentPost = currentPost.next
+		currentIndex++
+	}
 }
 
 func main() {
@@ -119,10 +135,14 @@ func main() {
 
 	f.Inspect()
 
+	u := &Feed{}
 	newPost := &Post{
 		body:        "This is a new post",
 		publishDate: rightNow + 15,
 	}
-	f.Insert(newPost)
+	u.Insert(newPost)
+	u.Inspect()
+
+	f.Merge(u)
 	f.Inspect()
 }
