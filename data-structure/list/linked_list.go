@@ -86,17 +86,20 @@ func (f *Feed) Inspect() {
 	currentPost := f.start
 
 	for currentIndex < f.length {
-		fmt.Printf("Item: %v - %v - %v\n", currentIndex, currentPost.body, currentPost.publishDate)
+		fmt.Printf("Item: %v - %v - %v - %v\n", currentIndex, currentPost.body, currentPost.publishDate, currentPost.next)
 		currentPost = currentPost.next
 		currentIndex++
 	}
 	fmt.Println("========================")
 }
 
-// Inspect Feed
+// Merge Feeds
 func (f *Feed) Merge(u *Feed) {
-	if f.length == 0 {
+	if f.length == 0 && u.length != 0 {
 		f.start = u.start
+		return
+	} else if u.length == 0 && f.length != 0 {
+		return
 	}
 
 	currentIndex := 0
@@ -107,6 +110,28 @@ func (f *Feed) Merge(u *Feed) {
 		currentPost = currentPost.next
 		currentIndex++
 	}
+}
+
+// RecursiveMerge Merge Feeds
+func (f *Post) RecursiveMerge(u *Post) *Post {
+	if f == nil && u != nil {
+		f = u
+		return f
+	} else if u == nil && f != nil {
+		u = f
+		return u
+	}
+
+	var result *Post
+
+	if f.publishDate <= u.publishDate {
+		result = f
+		f.next = f.next.RecursiveMerge(u)
+	} else {
+		result = u
+		u.next = f.RecursiveMerge(u.next)
+	}
+	return result
 }
 
 func main() {
@@ -143,6 +168,11 @@ func main() {
 	u.Insert(newPost)
 	u.Inspect()
 
-	f.Merge(u)
+	// f.Merge(u)
+	// f.Inspect()
+
+	f.start.RecursiveMerge(u.start)
+	// absolut nicht sauber :/
+	f.length = f.length + u.length
 	f.Inspect()
 }
